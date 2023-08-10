@@ -8,7 +8,9 @@
 >```{"id": int, "text": int}```
 
 #### Настройка
->URI вебсокетов, размер chunk'а данных и ключевое поле для сортировки указываются в файле **settings**
+URI вебсокетов, размер chunk'а данных и ключевое поле для сортировки указываются в файле **settings**
 
 #### Запуск
->```docker build --tag 'ws' . && docker run -d 'ws'```
+```commandline
+docker build --tag 'ws' . && docker run -d 'ws'
+```
