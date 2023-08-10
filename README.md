@@ -14,5 +14,6 @@ URI вебсокетов, размер chunk'а данных и ключевое
 
 #### Запуск
 ```commandline
-docker build --tag 'ws' . && docker run -d 'ws'
+docker build -t 'ws' . 
+docker run -d 'ws'
 ```
