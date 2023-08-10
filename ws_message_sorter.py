@@ -1,15 +1,14 @@
+import os
 import json
 import asyncio
-import time
 import logging
+import time
 from operator import itemgetter
 
 from websocket import create_connection
 
-from settings import ws_uri_receive, ws_uri_send, test_chunk_size, key_for_sort
-
-logging.basicConfig(filename='msg_sort.log', level=logging.INFO)
-logger = logging.getLogger('ws_client')
+logging.basicConfig(filename='ws_sorter.log', level=logging.INFO)
+logger = logging.getLogger(name='ws_sorter')
 
 
 class WsMessageSorter:
@@ -41,10 +40,15 @@ class WsMessageSorter:
         self.key_for_sort = key_for_sort
 
     async def run(self) -> None:
+        logger.info('start run - create connections')
         self._create_connections()
+        logger.info('connections created')
         while True:
+            logger.info('collect chunk')
             await self._get_chunk()
+            logger.info('sort chunk')
             await self._sort_chunk()
+            logger.info('send chunk')
             await self._send_chunk()
             await self._write_logs()
 
@@ -80,10 +84,13 @@ class WsMessageSorter:
 
 if __name__ == '__main__':
     mesage_sorter = WsMessageSorter(
-        uri_receive=ws_uri_receive,
-        uri_send=ws_uri_send,
-        chunk_size=test_chunk_size,
-        key_for_sort=key_for_sort
+        uri_receive=os.environ['URI_RCV'],
+        uri_send=os.environ['URI_SEND'],
+        chunk_size=int(os.environ['SIZE_CHUNK']),
+        key_for_sort=os.environ['KEY_FIELD']
     )
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(mesage_sorter.run())
+    try:
+        loop.run_until_complete(mesage_sorter.run())
+    except Exception as err:
+        logger.warning(f"Error - {err}")

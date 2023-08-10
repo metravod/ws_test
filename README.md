@@ -15,5 +15,5 @@ URI вебсокетов, размер chunk'а данных и ключевое
 #### Запуск
 ```commandline
 docker build -t 'ws' . 
-docker run -d 'ws'
+docker run -e URI_RCV=<uri_receive> -e URI_SEND=<uri_send> -e SIZE_CHUNK=<size_chunk> -e KEY_FIELD=<key_field_for_sort> -d 'ws'
 ```
